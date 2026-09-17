@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+  <rect width="900" height="1200" fill="#fdfbf6"/>
+  <circle cx="660" cy="150" r="360" fill="#c97a8a" opacity="0.06"/>
+  <circle cx="160" cy="1120" r="330" fill="#c97a8a" opacity="0.05"/>
+  <path d="M42 110 C 180 20, 300 8, 448 86 L 428 118 C 300 48, 184 44, 64 128 Z" fill="#1c1917" opacity="0.6"/>
+  <rect x="225" y="200" width="450" height="620" rx="36" fill="#c97a8a" opacity="0.9"/>
+<rect x="225" y="200" width="450" height="620" rx="36" fill="none" stroke="#1c1917" stroke-opacity="0.14"/>
+  <text x="60" y="900" font-family="Georgia, 'Times New Roman', serif" font-size="46" fill="#1c1917">Pink Printed Saree</text>
+  <text x="60" y="948" font-family="Arial, sans-serif" font-size="26" fill="#8a6d2b">TEXVALLEY I-RIS</text>
+  <text x="60" y="1120" font-family="Arial, sans-serif" font-size="20" letter-spacing="6" fill="#4a4239">DEMO CATALOGUE PLACEHOLDER</text>
+  <text x="60" y="1150" font-family="Arial, sans-serif" font-size="16" fill="#4a4239">Replace with approved product photography.</text>
+</svg>

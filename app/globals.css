@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --color-ivory-50: #fdfbf6;
+  --color-ivory-100: #faf6ee;
+  --color-ivory-200: #f3ecdd;
+
+  --color-espresso-500: #4a4239;
+  --color-espresso-700: #2b2520;
+  --color-espresso-900: #1c1917;
+
+  --color-brass-100: #f5ead0;
+  --color-brass-200: #e8d5a8;
+  --color-brass-500: #a5832f;
+  --color-brass-600: #8a6d2b;
+  --color-brass-700: #6f5722;
+
+  --color-rosewood-600: #7a2e3f;
+  --color-rosewood-700: #5f2331;
+
+  --animate-rise: rise 0.7s ease both;
+  --animate-scan: scan 3.2s ease-in-out infinite;
+}
+
+:root {
+  --background: #fdfbf6;
+  --foreground: #1c1917;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #e8d5a8;
+  color: #1c1917;
+}
+
+/* Visible, elegant keyboard focus for accessibility */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #8a6d2b;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    top: 8%;
+    opacity: 0.9;
+  }
+  50% {
+    top: 84%;
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

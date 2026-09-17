@@ -1,0 +1,6 @@
+# Never commit model weights or generated/customer data.
+weights/
+data/
+__pycache__/
+*.pyc
+.venv/

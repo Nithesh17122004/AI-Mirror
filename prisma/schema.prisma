@@ -1,0 +1,284 @@
+// Texvalley I-RIS — Phase 2 product catalogue + demo inventory.
+// Phase 1 foundation preserved. Phase 2 adds product detail fields,
+// gender/status enums, and placeholder imagery fields.
+// Real AI, analytics, and business logic remain for later phases.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TryOnStatus {
+  CREATED
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum RecommendationType {
+  SIZE
+  STYLE
+  SIMILAR
+  COMPLETE_LOOK
+}
+
+enum Gender {
+  MEN
+  WOMEN
+  UNISEX
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  COMING_SOON
+}
+
+// Phase 6 — size chart provenance. DEMO = seed/illustrative data clearly
+// marked in the UI; BRAND = real measurements supplied by TEXVALLEY or a
+// brand. The engine never labels demo data as official measurements.
+enum SizeChartSource {
+  DEMO
+  BRAND
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wishlists       Wishlist[]
+  tryOnSessions   TryOnSession[]
+  recommendations Recommendation[]
+  analyticsEvents AnalyticsEvent[]
+}
+
+model Brand {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Colour {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  hex       String?
+  createdAt DateTime @default(now())
+
+  products Product[] @relation("ProductColours")
+}
+
+model Size {
+  id        String   @id @default(cuid())
+  label     String   @unique
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  products       Product[]      @relation("ProductSizes")
+  inventories    Inventory[]
+  sizeChartRows  SizeChartRow[]
+}
+
+model Store {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  city      String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inventories Inventory[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  slug        String   @unique
+  name        String
+  description String?
+
+  priceInr      Int      @default(0)
+  salePriceInr  Int?
+  currency      String   @default("INR")
+  gender        Gender   @default(UNISEX)
+  material      String?
+  status        ProductStatus @default(ACTIVE)
+  imageUrl      String?
+  tryOnAssetUrl String?
+  images        String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  brandId    String
+  brand      Brand    @relation(fields: [brandId], references: [id], onDelete: Restrict)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  colours Colour[] @relation("ProductColours")
+  sizes   Size[]   @relation("ProductSizes")
+
+  sizeChart SizeChart?
+
+  inventories     Inventory[]
+  wishlists       Wishlist[]
+  tryOnSessions   TryOnSession[]
+  recommendations Recommendation[]
+
+  @@index([brandId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([gender])
+}
+
+// Phase 6 — a product's size chart. Measurements are always stored in
+// centimetres (cm). `source` records whether these are DEMO seed values or
+// real BRAND/TEXVALLEY measurements so the UI can be honest about what a
+// recommendation is based on.
+model SizeChart {
+  id          String           @id @default(cuid())
+  productId   String           @unique
+  product     Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  source      SizeChartSource  @default(DEMO)
+  sourceLabel String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  rows SizeChartRow[]
+
+  @@index([productId])
+}
+
+model SizeChartRow {
+  id        String     @id @default(cuid())
+  chartId   String
+  chart     SizeChart  @relation(fields: [chartId], references: [id], onDelete: Cascade)
+  sizeId    String
+  size      Size       @relation(fields: [sizeId], references: [id], onDelete: Restrict)
+  sortOrder Int        @default(0)
+
+  chestCm  Int?
+  waistCm  Int?
+  hipCm    Int?
+  heightCm Int?
+  inseamCm Int?
+
+  @@unique([chartId, sizeId])
+  @@index([chartId])
+  @@index([sizeId])
+}
+
+model Inventory {
+  id        String   @id @default(cuid())
+  quantity  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  storeId   String
+  store     Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  sizeId    String
+  size      Size    @relation(fields: [sizeId], references: [id], onDelete: Restrict)
+
+  @@unique([productId, storeId, sizeId])
+  @@index([storeId])
+  @@index([productId])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+model TryOnSession {
+  id             String      @id @default(cuid())
+  status         TryOnStatus @default(CREATED)
+  inputImageUrl  String?
+  outputImageUrl String?
+
+  // Phase 4: provider + outcome metadata. The customer image itself is
+  // never persisted — only its file metadata is kept for auditability.
+  provider           String?
+  providerRequestId  String?
+  processingMs       Int?
+  inputImageName     String?
+  inputImageSource   String?
+  errorCode          String?
+  errorMessage       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([productId])
+  @@index([status])
+}
+
+model Recommendation {
+  id        String             @id @default(cuid())
+  type      RecommendationType
+  score     Float?
+  payload   Json?
+  createdAt DateTime           @default(now())
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([productId])
+  @@index([type])
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  name      String
+  sessionId String?
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([name])
+  @@index([userId])
+  @@index([createdAt])
+}
