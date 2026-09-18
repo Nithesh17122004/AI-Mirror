@@ -70,8 +70,12 @@ export function mapCategoryToVton(
     case "one-pieces":
       return "one-pieces";
     default:
-      // Conservative default for items the catalogue does not yet classify.
-      return "one-pieces";
+      // Honest contract: an unknown or missing catalogue category must NEVER
+      // be silently coerced into a garment category. Surface an explicit
+      // unsupported-category error instead of fabricating a result.
+      // Static default message (identical convention to every other factory in
+      // errors.ts): never echo the raw catalogue input back into the response.
+      throw errors.unsupportedCategory();
   }
 }
 

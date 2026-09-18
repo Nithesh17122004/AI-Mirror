@@ -31,6 +31,9 @@ export const errors = {
     new TryOnError("invalid-photo", message, false),
   invalidRequest: (message = "The request was not valid. Please try again.") =>
     new TryOnError("invalid-request", message, false),
+  unsupportedCategory: (
+    message = "That item's category isn't supported for virtual try-on yet."
+  ) => new TryOnError("unsupported-category", message, false),
   providerNotConfigured: (message = "The virtual try-on provider isn't configured yet.") =>
     new TryOnError("provider-not-configured", message, false),
   providerFailed: (message = "The try-on preview failed to generate. Please try again.") =>

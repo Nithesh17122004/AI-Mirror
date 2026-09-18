@@ -44,6 +44,7 @@ export type TryOnErrorCode =
   | "missing-photo"
   | "invalid-photo"
   | "invalid-request"
+  | "unsupported-category"
   | "provider-not-configured"
   | "provider-failed"
   | "session-unavailable"

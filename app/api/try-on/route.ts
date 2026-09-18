@@ -46,6 +46,7 @@ export type TryOnRequestSchema = z.infer<typeof tryOnRequestSchema>;
 
 const ERROR_STATUS: Record<TryOnErrorCode, number> = {
   "invalid-request": 400,
+  "unsupported-category": 400,
   "missing-product": 400,
   "invalid-product": 400,
   "missing-photo": 400,

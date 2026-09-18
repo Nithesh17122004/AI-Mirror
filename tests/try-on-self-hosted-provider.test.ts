@@ -8,6 +8,7 @@ import {
   SelfHostedVirtualTryOnProvider,
   mapCategoryToVton,
 } from "../lib/try-on/providers/self-hosted";
+import { TryOnError } from "../lib/try-on/errors";
 import { getTryOnProvider } from "../lib/try-on/providers";
 import type { VirtualTryOnInput } from "../lib/try-on/providers/types";
 
@@ -333,10 +334,22 @@ describe("mapCategoryToVton", () => {
     assert.equal(mapCategoryToVton("sarees"), "one-pieces");
   });
 
-  test("defaults unknown/missing categories to one-pieces", () => {
-    assert.equal(mapCategoryToVton(undefined), "one-pieces");
-    assert.equal(mapCategoryToVton(null), "one-pieces");
-    assert.equal(mapCategoryToVton("accessories"), "one-pieces");
+  test("rejects unknown/missing categories with an explicit unsupported-category error", () => {
+    assert.throws(
+      () => mapCategoryToVton(undefined),
+      (error: unknown) =>
+        error instanceof TryOnError && error.code === "unsupported-category"
+    );
+    assert.throws(
+      () => mapCategoryToVton(null),
+      (error: unknown) =>
+        error instanceof TryOnError && error.code === "unsupported-category"
+    );
+    assert.throws(
+      () => mapCategoryToVton("accessories"),
+      (error: unknown) =>
+        error instanceof TryOnError && error.code === "unsupported-category"
+    );
   });
 });
 
