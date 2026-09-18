@@ -105,12 +105,14 @@ export const categories: SeedCategory[] = [
   { name: "Women's Kurtas", slug: "womens-kurtas", description: "Artisan-inspired kurtas in cotton, silk and festive weaves." },
   { name: "Sarees", slug: "sarees", description: "Handloom sarees, printed silks and contemporary drapes." },
   { name: "Jeans", slug: "jeans", description: "Reliable denim in relaxed, slim and straight fits for men and women." },
+  { name: "Men's Joggers", slug: "mens-joggers", description: "Relaxed activewear joggers and track bottoms for men." },
 ];
 
 export const brands: SeedBrand[] = [
   { name: "I-RIS Studio", slug: "iris-studio", description: "Demo collection curated for the I-RIS mirror experience." },
   { name: "Texvalley Demo Collection", slug: "texvalley-demo", description: "Fictional demonstration pieces shown in the I-RIS catalogue." },
   { name: "I-RIS Essentials", slug: "iris-essentials", description: "Everyday wardrobe essentials designed for the digital try-on demo." },
+  { name: "Behind Bars Activewear", slug: "behindbars-demo", description: "Real supplied garment photos wired to the I-RIS demo mirror (Phase-13 real-asset wiring)." },
 ];
 
 export const colours: SeedColour[] = [
@@ -310,6 +312,46 @@ export const products: SeedProduct[] = [
     imageUrl: "/products/brown-cord-trousers.svg", tryOnAssetUrl: "/products/try-on/brown-cord-trousers.svg",
     brandSlug: "texvalley-demo", categorySlug: "jeans", colourSlugs: ["Brown"], sizeSlugs: ["M","L","XL"],
     inventory: [{ sizeSlug: "M", quantity: 0 }, { sizeSlug: "L", quantity: 2 }, { sizeSlug: "XL", quantity: 4 }],
+  },
+  {
+    sku: "IR-REAL-001", slug: "behindbars-formal-shirt-full-sleeve", name: "Formal Shirt (Full Sleeve)",
+    description: "Real supplied formal shirt photo (behindbars). Wired from the shipped garment asset — shown as-is for the real-asset demo mirror.",
+    priceInr: 1999, salePriceInr: null, gender: "MEN", material: "Formal weave", status: "ACTIVE",
+    imageUrl: "/products/real/behindbars-formal-shirt-full-sleeve.webp", tryOnAssetUrl: "/products/real/behindbars-formal-shirt-full-sleeve.webp",
+    brandSlug: "behindbars-demo", categorySlug: "mens-shirts", colourSlugs: ["White"], sizeSlugs: ["M","L","XL"],
+    inventory: [{ sizeSlug: "M", quantity: 2 }, { sizeSlug: "L", quantity: 3 }, { sizeSlug: "XL", quantity: 1 }],
+  },
+  {
+    sku: "IR-REAL-002", slug: "behindbars-collared-tshirt-full-sleeve", name: "Collared T-Shirt (Full Sleeve)",
+    description: "Real supplied collared t-shirt photo (behindbars). Shown as-is from the shipped garment asset for the demo mirror.",
+    priceInr: 1299, salePriceInr: null, gender: "MEN", material: "Collared knit", status: "ACTIVE",
+    imageUrl: "/products/real/behindbars-collared-tshirt-full-sleeve.webp", tryOnAssetUrl: "/products/real/behindbars-collared-tshirt-full-sleeve.webp",
+    brandSlug: "behindbars-demo", categorySlug: "mens-tshirts", colourSlugs: ["Navy"], sizeSlugs: ["M","L","XL"],
+    inventory: [{ sizeSlug: "M", quantity: 2 }, { sizeSlug: "L", quantity: 500004 }, { sizeSlug: "XL", quantity: 1 }],
+  },
+  {
+    sku: "IR-REAL-003", slug: "behindbars-casual-shirt-full-sleeve", name: "Casual Shirt (Full Sleeve)",
+    description: "Real supplied casual shirt photo (behindbars). Shown as-is from the shipped garment asset for the demo mirror.",
+    priceInr: 1499, salePriceInr: null, gender: "MEN", material: "Casual weave", status: "ACTIVE",
+    imageUrl: "/products/real/behindbars-casual-shirt-full-sleeve.webp", tryOnAssetUrl: "/products/real/behindbars-casual-shirt-full-sleeve.webp",
+    brandSlug: "behindbars-demo", categorySlug: "mens-shirts", colourSlugs: ["Blue"], sizeSlugs: ["M","L","XL"],
+    inventory: [{ sizeSlug: "M", quantity: 3 }, { sizeSlug: "L", quantity: 4 }, { sizeSlug: "XL", quantity: 2 }],
+  },
+  {
+    sku: "IR-REAL-004", slug: "behindbars-active-track-joggers-final", name: "Active Track Joggers",
+    description: "Real supplied active track joggers photo (behindbars). Shown as-is from the shipped garment asset for the demo mirror.",
+    priceInr: 1799, salePriceInr: null, gender: "MEN", material: "Track-knit activewear", status: "ACTIVE",
+    imageUrl: "/products/real/behindbars-active-track-joggers-final.webp", tryOnAssetUrl: "/products/real/behindbars-active-track-joggers-final.webp",
+    brandSlug: "behindbars-demo", categorySlug: "mens-joggers", colourSlugs: ["Black"], sizeSlugs: ["S","M","L","XL"],
+    inventory: [{ sizeSlug: "S", quantity: 2 }, { sizeSlug: "M", quantity: 3 }, { sizeSlug: "L", quantity: 4 }, { sizeSlug: "XL", quantity: 1 }],
+  },
+  {
+    sku: "IR-REAL-005", slug: "behindbars-active-full-sleeve-tshirt-final", name: "Active Full Sleeve T-Shirt",
+    description: "Real supplied active full-sleeve t-shirt photo (behindbars). Shown as-is from the shipped garment asset for the demo mirror.",
+    priceInr: 1099, salePriceInr: null, gender: "MEN", material: "Active jersey knit", status: "ACTIVE",
+    imageUrl: "/products/real/behindbars-active-full-sleeve-tshirt-final.webp", tryOnAssetUrl: "/products/real/behindbars-active-full-sleeve-tshirt-final.webp",
+    brandSlug: "behindbars-demo", categorySlug: "mens-tshirts", colourSlugs: ["Navy"], sizeSlugs: ["M","L","XL"],
+    inventory: [{ sizeSlug: "M", quantity: 2 }, { sizeSlug: "L", quantity: 3 }, { sizeSlug: "XL", quantity: 1 }],
   },
 ];
 
