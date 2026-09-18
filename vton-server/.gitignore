@@ -1,6 +1,21 @@
-# Never commit model weights or generated/customer data.
+﻿# Never commit model weights, inference outputs, customers, venv, or caches.
 weights/
 data/
 __pycache__/
 *.pyc
 .venv/
+
+# IDM-VTON official source subtree - NEVER weights/outputs/checkpoints
+IDM-VTON/IDM-VTON-main/ckpt/
+*.safetensors
+*.safetensors.json
+*.bin
+*.pth
+*.ckpt
+*.onnx
+*-000001.vae
+unet/
+text_encoder/
+ip-adapter/
+sample/
+output/
