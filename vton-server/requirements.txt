@@ -1,21 +1,35 @@
-# Self-hosted VTON inference server — dependencies
-# Target: NVIDIA GPU + CUDA (Ampere or newer) machine. See README.md.
+# Self-hosted VTON inference server — runtime dependencies.
+#
+# The FASHN VTON 1.5 model itself is NOT installed from git anymore. It is
+# vendored in-tree at vton-server/fashn-vton-1.5/ (real source, real
+# TryOnPipeline). The Dockerfile copies that directory and points PYTHONPATH at
+# its `src/`, so there is NO git dependency at build time — python:3.11-slim
+# does not ship git paasa. Weights are NEVER downloaded or committed here.
 
 # Web framework
 fastapi>=0.115
 uvicorn[standard]>=0.30
+python-multipart>=0.0.9
 
-# Image handling
+# Image handling + HTTP for remote garment assets
 Pillow>=10.0
-
-# HTTP client for remote garment images
 requests>=2.31
 
-# FASHN VTON v1.5 inference code (official GitHub repo, Apache-2.0).
-# Pulls the pipeline + scripts. Requires torch/onnxruntime-gpu below.
-fashn-vton @ git+https://github.com/fashn-AI/fashn-vton-1.5.git@main
+# Real inference runtime, aligned to the vendored fashn-vton-1.5 pyproject.toml.
+# Keep these matching that metadata (never guess/invent CUDA aliases):
+torch>=2.0
+torchvision>=0.15
+safetensors>=0.3.0
+huggingface_hub>=0.20.0
+numpy>=1.21.0
+opencv-python>=4.5.0
+tqdm>=4.65.0
+einops>=0.6.0
+onnxruntime-gpu>=1.14.0
+matplotlib>=3.5.0
 
-# Deep learning runtime (GPU). The fashn-vton package pins its own torch;
-# if conflicts arise, align these with the official repository's pyproject.
-torch>=2.4
-onnxruntime-gpu>=1.17
+# NOTE: `fashn-human-parser` is listed by the vendored pyproject as a runtime
+# dependency of the model package; the vendored source may import it. It is
+# intentionally omitted from THIS pip list because it is not a real PyPI
+# package and must not break the web build. The vendored model source handles
+# its own parser loading.
