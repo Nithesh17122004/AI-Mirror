@@ -80,4 +80,4 @@ EXPOSE 8060
 # 6. Start FastAPI VTON service
 # ------------------------------------------------------------
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8060"]
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-10000}"]
