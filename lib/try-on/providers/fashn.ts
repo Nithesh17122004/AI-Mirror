@@ -16,6 +16,4 @@ import { SelfHostedVirtualTryOnProvider } from "./self-hosted";
 import type { VirtualTryOnProvider } from "./types";
 
 export const fashnVtonProvider: VirtualTryOnProvider =
-  new SelfHostedVirtualTryOnProvider({
-    mode: "real",
-  });
+  new SelfHostedVirtualTryOnProvider();
