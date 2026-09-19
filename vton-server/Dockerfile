@@ -1,36 +1,83 @@
-# VTON inference service image.
+# FASHN VTON 1.5 inference service
 #
-# The FASHN VTON 1.5 model source is VENDORED in-repo (vton-server/fashn-vton-1.5),
-# so this image does NOT need git and does NOT clone anything at build time.
-# Weights are NEVER committed and NEVER downloaded during the build.
+# The FASHN VTON 1.5 source is vendored in:
+#   vton-server/fashn-vton-1.5/
+#
+# Model weights are NOT committed to GitHub and are NOT downloaded
+# during the Docker build.
+#
+# They must be supplied separately on the VTON deployment host.
 
 FROM python:3.11-slim
 
 WORKDIR /srv/vton
 
-# 1. Copy and install the NON-model runtime deps only (no git line).
-COPY requirements.txt .
+# ------------------------------------------------------------
+# 1. Install Python runtime dependencies
+# ------------------------------------------------------------
+
+COPY requirements.txt ./requirements.txt
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 2. Copy the vendored FASHN VTON 1.5 source and make it importable.
-#    src/ layout -> `from fashn_vton import TryOnPipeline`.
+
+# ------------------------------------------------------------
+# 2. Install vendored FASHN VTON 1.5 source
+# ------------------------------------------------------------
+
 COPY fashn-vton-1.5/ ./fashn-vton-1.5/
+
 ENV PYTHONPATH=/srv/vton/fashn-vton-1.5/src
 
-# 3. Copy the FastAPI app + inference glue.
-COPY app.py .
-COPY inference/ ./inference/
-COPY scripts/download_weights.py ./scripts/download_weights.py
 
-# 4. Configuration (server-side only; never exposed via the browser).
-#    Weights are placed on the host at runtime by the operator (see
-#    docs/FASHN_VTON_DEPLOYMENT.md) and mounted in; never committed.
+# ------------------------------------------------------------
+# 3. Copy VTON API server
+# ------------------------------------------------------------
+
+COPY app.py ./app.py
+
+COPY inference/ ./inference/
+
+
+# ------------------------------------------------------------
+# 4. Runtime configuration
+# ------------------------------------------------------------
+
+# Directory containing manually installed FASHN model weights.
+#
+# IMPORTANT:
+# Do NOT commit model weights to GitHub.
+# Do NOT put them inside the Next.js application.
+#
+# For a GPU host, this should point to the directory containing
+# the real FASHN VTON 1.5 checkpoints.
+
 ENV VTON_WEIGHTS_DIR=/srv/vton/weights
+
+# Temporary data directory.
 ENV VTON_DATA_DIR=/srv/vton/data
+
+# API authentication.
+# Set the real value in Render Environment Variables.
 ENV VTON_SERVER_API_KEY=
+
+# Temporary-file retention.
 ENV RETENTION_MINUTES=15
+
+# Keep disabled unless your application explicitly requires
+# model preloading behavior.
 ENV PRECACHE_MODEL=0
 
+
+# ------------------------------------------------------------
+# 5. Service port
+# ------------------------------------------------------------
+
 EXPOSE 8060
+
+
+# ------------------------------------------------------------
+# 6. Start FastAPI VTON service
+# ------------------------------------------------------------
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8060"]
